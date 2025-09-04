@@ -1,0 +1,53 @@
+/* 1) Tailwind v4 laden */
+@import "tailwindcss";
+
+/* 2) Deine Holz-&-Stein-Palette als Design Tokens (v4) */
+@theme {
+  /* Holzbraun */
+  --color-brand-primary: #8b5e3c;
+  --color-brand-primary-light: #d9c1b3;
+  --color-brand-primary-xlight: #ede2da;
+
+  /* Steingrau */
+  --color-brand-secondary: #4b5563;
+  --color-brand-secondary-light: #d1d5db;
+  --color-brand-secondary-xlight: #f3f4f6;
+
+  /* Moosgrün */
+  --color-brand-accent: #047857;
+  --color-brand-accent-light: #bbf7d0;
+  --color-brand-accent-xlight: #ecfdf5;
+
+  /* Warmweiß */
+  --color-brand-light: #fefefe;
+  --color-brand-light-soft: #fafaf9;
+  --color-brand-light-xlight: #ffffff;
+}
+
+/* 3) Base-Defaults (wirken global) */
+@layer base {
+  html, body { height: 100%; }
+  body { @apply bg-brand-light text-slate-800 antialiased; }
+  h1, h2, h3, h4 { @apply text-slate-900; }
+  a { @apply text-brand-accent hover:underline; }
+}
+
+/* 4) Deine wiederverwendbaren Utilities/Komponenten-Klassen */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center box-border
+           rounded-xl px-5 py-3
+           text-base font-semibold text-center
+           transition no-underline hover:no-underline;
+  }
+
+  .btn-primary {
+    @apply bg-brand-primary text-brand-light
+           hover:bg-brand-primary-xlight hover:text-brand-primary;
+  }
+
+  .btn-secondary {
+    @apply border border-brand-primary text-brand-primary
+           hover:bg-brand-primary-xlight;
+  }
+}
