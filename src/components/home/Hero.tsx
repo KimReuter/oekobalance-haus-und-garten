@@ -4,7 +4,8 @@
 import Image from "next/image";
 import ButtonLink from "../ui/ButtonLink";
 import { siteConfig } from "@/lib/siteConfig";
-import { motion, type Variants } from "framer-motion";
+import { motion, useScroll, useTransform, type Variants } from "framer-motion";
+import { useRef } from "react";
 
 const container: Variants = {
   hidden: { opacity: 0 },
@@ -24,27 +25,46 @@ const fadeUp: Variants = {
 };
 
 export default function Hero() {
+const ref = useRef<HTMLElement>(null);
+
+const { scrollYProgress } = useScroll({
+  target: ref,
+  offset: ["start start", "end start"],
+});
+
+const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
+const yFg = useTransform(scrollYProgress, [0, 1], ["0%", "8%"]);
+const bGScale = useTransform(scrollYProgress, [0, 1], [1.12, 1.2])
+
   return (
-    <section className="relative isolate min-h-[100svh]">
+    <section 
+    ref={ref}
+    className="relative isolate min-h-[100svh] overflow-hidden">
       {/* Hintergrundbild */}
-      <Image
+      <motion.div
+      aria-hidden
+      className="absolute inset-0"
+      style={{ y: yBg, scale: bGScale }}
+      >
+        <Image
         src="/hero.jpg"
         alt=""
         fill
         priority
         className="object-cover object-center"
       />
+
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/40" />
-
+      </motion.div>
+      
       {/* Inhalt */}
       <motion.div
         className="relative z-10 grid min-h-[100svh] place-content-center px-4 text-center"
         variants={container}
         initial="hidden"
         animate="show"
-        // optional: nur einmal animieren, wenn sichtbar
-        // viewport={{ once: true, amount: 0.6 }}
+        style={{ y: yFg}}
       >
         <motion.p
           className="text-sm font-medium tracking-wider uppercase text-brand-primary-light"

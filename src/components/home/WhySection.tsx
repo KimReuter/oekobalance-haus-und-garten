@@ -33,7 +33,7 @@ export default function WhySection() {
       <div>
         <h2 className="text-3xl md:text-4xl font-bold mb-6">Warum Ökobalance?</h2>
         <p className="text-lg text-slate-700 leading-relaxed">
-          Ich verbinde <strong>Garten- und Landschaftsbau</strong>,{" "}
+          Wir verbinden <strong>Garten- und Landschaftsbau</strong>,{" "}
           <strong>Hausbau</strong> und <strong>Innenausbau</strong> mit einem klaren Fokus auf{" "}
           <strong>Nachhaltigkeit</strong>. <br />
           Das Ergebnis: langlebige Lösungen mit natürlichen Materialien und saubere Ausführung.
