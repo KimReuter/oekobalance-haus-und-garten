@@ -26,7 +26,7 @@
 
 /* 3) Base-Defaults (wirken global) */
 @layer base {
-  html, body { height: 100%; }
+  html, body { height: 100%; overflow-x: clip; }
   body { @apply bg-brand-light text-slate-800 antialiased; }
   h1, h2, h3, h4 { @apply text-slate-900; }
   a { @apply text-brand-accent hover:underline; }
@@ -50,4 +50,13 @@
     @apply border border-brand-primary text-brand-primary
            hover:bg-brand-primary-xlight;
   }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-33.3333%); } 
+}
+
+.animate-marquee {
+  animation: marquee var(--marquee-speed, 12s) linear infinite;
 }

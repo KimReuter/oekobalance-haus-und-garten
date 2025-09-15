@@ -7,7 +7,7 @@ import ButtonLink from "@/components/ui/ButtonLink";
 
 export default function Footer() {
   return (
-    <footer className="bg-brand-primary-light text-slate-200 border-t border-white/10">
+    <footer className="bg-brand-primary-light text-slate-200">
       <div className="mx-auto max-w-6xl px-4 py-14">
         {/* Grid: 4 Spalten auf Desktop, 2 auf Tablet, 1 auf Mobile */}
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">

@@ -5,15 +5,20 @@ import Link from "next/link";
 
 import Hero from "@/components/home/Hero";
 import FeatureList from "@/components/home/FeatureList";
-import ServiceCard from "@/components/home/ServiceCard";
 import GalleryGrid from "@/components/home/GalleryGrid";
-import AboutTeaser from "@/components/home/AboutTeaser";
+import AboutPaul from "@/components/home/AboutPaul";
 import FinalCta from "@/components/home/FinalCta";
 
 import Container from "@/components/ui/Container";
 import Section from "@/components/ui/Section";
 import SectionHeading from "@/components/ui/SectionHeading";
 import WhySection from "@/components/home/WhySection";
+import Stats from "@/components/home/Stats";
+import OneStopTeaser from "@/components/home/OneStopTeaser";
+import ReferencesCarousel from "@/components/home/ReferencesCarousel";
+import ServicesPinned from "@/components/home/ServicesPinned";
+import WhySticky from "@/components/home/WhySticky";
+import SplitWords from "./utils/SplitWords";
 
 export const metadata: Metadata = {
   title: "Ökobalance Haus & Garten – Nachhaltige Lösungen für Haus & Garten",
@@ -29,75 +34,27 @@ export default function HomePage() {
 
       {/* INTRO + FEATURES */}
       <WhySection />
+      <WhySticky />
 
-      {/* SERVICES TEASER */}
-      <Section bg="bg-brand-light">
-        <Container>
-          <SectionHeading title="Leistungen" linkText="Alle Leistungen" linkHref="/services" />
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <ServiceCard
-              title="Gala-Bau & Terrassen"
-              desc="Naturstein, Holz & Pflaster – dauerhaft, ästhetisch, fachgerecht."
-              img="/services-terrasse.jpg"
-              alt="Terrassenbau aus Holz und Naturstein"
-              href="/services"
-            />
-            <ServiceCard
-              title="Gartenpflege"
-              desc="Pflege, Schnitt & ökologische Aufwertung – saisonal & nachhaltig."
-              img="/services-gartenpflege.jpg"
-              alt="Gepflegter Garten mit Hecken und Beeten"
-              href="/services"
-            />
-            <ServiceCard
-              title="Roh- & Innenausbau"
-              desc="Vom Mithelfen bis zur kompletten Umsetzung – präzise & sauber."
-              img="/services-innenausbau.jpg"
-              alt="Innenausbau mit Holz und Trockenbau"
-              href="/services"
-            />
-          </div>
-        </Container>
-      </Section>
 
-      {/* GALLERY TEASER */}
-      <Section>
-        <Container>
-          <SectionHeading title="Projekte & Galerie" linkText="Zur Galerie" linkHref="/gallery" />
-          <GalleryGrid />
-        </Container>
-      </Section>
 
       {/* ABOUT TEASER */}
-      <Section bg="bg-brand-primary-light">
-        <Container>
-          <AboutTeaser />
-        </Container>
-      </Section>
+      <AboutPaul />
+
+      {/* <OneStopTeaser /> */}
+      <OneStopTeaser />
 
       {/* TESTIMONIALS */}
-      <Section bg="bg-brand-light-soft">
-        <Container>
-          <SectionHeading title="Das sagen Kund:innen" linkText="Weitere Referenzen" linkHref="/references" />
-          <div className="mt-8 grid gap-6 md:grid-cols-3">
-            <Quote
-              quote="Schnell, sauber, zuverlässig – und obendrein nachhaltig gedacht."
-              name="M. Schneider"
-            />
-            <Quote
-              quote="Unsere Holzterrasse ist ein Traum – super umgesetzt."
-              name="F. Weber"
-            />
-            <Quote
-              quote="Endlich jemand, der mitdenkt und nicht nur abarbeitet."
-              name="A. Richter"
-            />
-          </div>
-        </Container>
-      </Section>
+
 
       {/* FINAL CTA */}
+      <section className="pb-24 md:pb-32">
+        <ReferencesCarousel />
+      </section>
+
       <FinalCta />
+      { /* Stats */}
+      <Stats />
     </main>
   );
 }
