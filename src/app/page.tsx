@@ -19,6 +19,7 @@ import ReferencesCarousel from "@/components/home/ReferencesCarousel";
 import ServicesPinned from "@/components/home/ServicesPinned";
 import WhySticky from "@/components/home/WhySticky";
 import SplitWords from "./utils/SplitWords";
+import StickyNav from "@/components/layout/StickyNav";
 
 export const metadata: Metadata = {
   title: "Ökobalance Haus & Garten – Nachhaltige Lösungen für Haus & Garten",
@@ -28,6 +29,9 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
+    <>
+          <StickyNav afterScroll="white" />
+
     <main className="text-slate-800">
       {/* HERO */}
       <Hero />
@@ -36,26 +40,25 @@ export default function HomePage() {
       <WhySection />
       <WhySticky />
 
-
-
       {/* ABOUT TEASER */}
       <AboutPaul />
 
       {/* <OneStopTeaser /> */}
       <OneStopTeaser />
 
-      {/* TESTIMONIALS */}
-
-
       {/* FINAL CTA */}
       <section className="pb-24 md:pb-32">
         <ReferencesCarousel />
       </section>
 
+      {/* TESTIMONIALS */}
       <FinalCta />
+
       { /* Stats */}
       <Stats />
     </main>
+    </>
+    
   );
 }
 

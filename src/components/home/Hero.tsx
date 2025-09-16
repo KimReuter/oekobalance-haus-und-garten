@@ -37,12 +37,13 @@ export default function Hero() {
 
   return (
     <section
+      id="hero"
       ref={ref}
       className="relative isolate min-h-[100svh] overflow-hidden">
       {/* Hintergrundbild */}
       <motion.div
         aria-hidden
-        className="absolute inset-0"
+        className="absolute inset-0 -z-10"
         style={{ y: yBg, scale: bGScale }}
       >
         <Image

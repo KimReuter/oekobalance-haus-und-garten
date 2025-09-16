@@ -77,7 +77,7 @@ export default function ReferencesSplit() {
     <section className="relative bg-brand-primary-xlight overflow-x-clip">
       {/* Marquee-Banner oben (maskiert, ohne Block dahinter) */}
       <div className="pointer-events-none absolute inset-x-0 top-6 md:top-10 z-30"
-   style={{ height: "clamp(72px, 14vw, 180px)" }}>
+        style={{ height: "clamp(72px, 14vw, 180px)" }}>
         <div className="absolute inset-0 [mask-image:linear-gradient(90deg,transparent,black_10%,black_90%,transparent)]">
           <div
             className="flex w-max items-center gap-16 will-change-transform animate-marquee"
