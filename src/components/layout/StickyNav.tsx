@@ -31,6 +31,8 @@ export default function StickyNav({
     const el = document.querySelector(heroSelector);
     const pageHasHero = !!el;
     setHasHero(pageHasHero);
+
+    // Seiten ohne Hero: direkt als "scrolled" starten
     setScrolled(!pageHasHero);
     setMobileOpen(false);
   }, [pathname, heroSelector]);
@@ -42,7 +44,11 @@ export default function StickyNav({
     const heroEl = document.querySelector(heroSelector) as HTMLElement | null;
     if (!heroEl) return;
 
-    const triggerMode = heroEl.getAttribute("data-nav-trigger") || "edge";
+    // 👇 NEU: Home erzwingen wir "start" (scrollY>0 reicht)
+    const triggerMode =
+      pathname === "/"
+        ? "start"
+        : heroEl.getAttribute("data-nav-trigger") || "edge";
 
     const w =
       typeof window !== "undefined"
@@ -62,7 +68,11 @@ export default function StickyNav({
     if ("IntersectionObserver" in (globalThis as any) && heroEl) {
       const obs = new IntersectionObserver(
         ([entry]) => setScrolled(!entry.isIntersecting),
-        { root: null, rootMargin: `-${threshold}px 0px 0px 0px`, threshold: 0 }
+        {
+          root: null,
+          rootMargin: `-${threshold}px 0px 0px 0px`,
+          threshold: 0,
+        }
       );
       obs.observe(heroEl);
       return () => obs.disconnect();
@@ -74,7 +84,8 @@ export default function StickyNav({
       w.addEventListener("scroll", onScroll, { passive: true });
       return () => w.removeEventListener("scroll", onScroll);
     }
-  }, [hasHero, heroSelector, threshold]);
+  }, [hasHero, heroSelector, threshold, pathname]);
+  //                              👆 pathname hinzufügen
 
   const filledBg =
     afterScroll === "white" ? "bg-white" : "bg-brand-primary-light";
@@ -99,26 +110,23 @@ export default function StickyNav({
       <header
         className={clsx(
           "fixed top-0 left-0 right-0 w-full z-[99999] transition-colors duration-200",
-
-          // Header bei mobileOpen immer gefüllt
           mobileOpen
             ? "bg-brand-primary-light"
-            : scrolled
-              ? `${filledBg} border-b border-black/5 shadow-sm`
-              : "bg-transparent"
+            : pathname === "/"
+              ? scrolled
+                ? "bg-brand-primary-light border-b border-black/5 shadow-sm"
+                : "bg-transparent"
+              : scrolled
+                ? `${filledBg} border-b border-black/5 shadow-sm`
+                : "bg-transparent"
         )}
       >
         <div className="mx-auto max-w-6xl px-4 h-16 flex items-center justify-between">
-          {/* Logo */}
           <Link
             href="/"
             className={clsx(
               "text-lg font-extrabold tracking-tight",
-              scrolled
-                ? afterScroll === "brown"
-                  ? "text-white"
-                  : "text-brand-primary"
-                : "text-white"
+              "text-white" // Logo immer weiß, passt zu hellbraun & Hero
             )}
           >
             <span className="md:hidden">Ökobalance</span>
@@ -130,11 +138,7 @@ export default function StickyNav({
             <nav className="flex items-center gap-6">
               {navItems.map((item) => {
                 const active = isActive(item.href);
-                const baseColor = !scrolled
-                  ? "text-white/90"
-                  : afterScroll === "brown"
-                    ? "text-white"
-                    : "text-neutral-800";
+                const baseColor = "text-white";
 
                 return (
                   <Link
@@ -147,9 +151,7 @@ export default function StickyNav({
                       active ? "text-brand-primary" : baseColor,
                       active
                         ? "hover:scale-100 active:scale-100"
-                        : scrolled
-                          ? "hover:text-brand-primary hover:scale-[1.04] active:scale-[0.98]"
-                          : "hover:text-white hover:scale-[1.04] active:scale-[0.98]"
+                        : "hover:text-white hover:scale-[1.04] active:scale-[0.98]"
                     )}
                   >
                     {item.label}
@@ -165,11 +167,7 @@ export default function StickyNav({
                 "inline-flex items-center justify-center rounded-xl px-6 py-3",
                 "text-base font-semibold tracking-tight leading-[1] antialiased no-underline",
                 "transform-gpu will-change-transform origin-center transition-transform duration-150 ease-out hover:scale-[1.03] active:scale-[0.99]",
-                !scrolled
-                  ? "bg-brand-primary text-white"
-                  : afterScroll === "brown"
-                    ? "bg-white text-brand-primary"
-                    : "bg-brand-primary text-white",
+                "bg-brand-primary text-white",
                 "border border-transparent shadow-none"
               )}
             >
@@ -177,18 +175,14 @@ export default function StickyNav({
             </button>
           </div>
 
-          {/* Mobile-Toggle: ENTWEDER Menu ODER X */}
+          {/* Mobile Toggle */}
           <button
             type="button"
             onClick={() => setMobileOpen(!mobileOpen)}
             className={clsx(
               "inline-flex items-center justify-center md:hidden",
-              "rounded-lg p-2 z-[100000]",         // Sicherstellen, dass er oben bleibt
-              scrolled && !mobileOpen
-                ? afterScroll === "brown"
-                  ? "text-white"
-                  : "text-brand-primary"
-                : "text-white"
+              "rounded-lg p-2 z-[100000]",
+              "text-white"
             )}
             aria-label={mobileOpen ? "Navigation schließen" : "Navigation öffnen"}
           >
@@ -196,14 +190,9 @@ export default function StickyNav({
           </button>
         </div>
 
-        {/* Mobile-Dropdown */}
+        {/* Mobile-Dropdown – immer hellbraun */}
         {mobileOpen && (
-          <div
-            className={clsx(
-              "md:hidden border-t border-black/5",
-              scrolled ? filledBg : "bg-brand-primary/95"
-            )}
-          >
+          <div className="md:hidden border-t border-black/5 bg-brand-primary-light">
             <nav className="mx-auto max-w-6xl px-4 py-4 flex flex-col gap-3">
               {navItems.map((item) => (
                 <Link
