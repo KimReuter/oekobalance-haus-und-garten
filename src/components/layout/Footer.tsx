@@ -129,7 +129,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/datenschutz"
+                  href="/privacy"
                   className="text-brand-primary hover:text-white underline-offset-4 hover:underline"
                 >
                   Datenschutzerklärung

@@ -5,6 +5,7 @@ import Footer from "@/components/layout/Footer";
 import LenisProvider from "@/components/providers/LenisProvider";
 import StickyNav from "@/components/layout/StickyNav";
 import ScrollToTop from "@/components/ui/ScrollToTop";
+import FloatingContactButton from "@/components/ui/FloatingContactButton";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -19,6 +20,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         </LenisProvider>
 
         <ScrollToTop />
+
+        <FloatingContactButton />
       </body>
     </html>
   );

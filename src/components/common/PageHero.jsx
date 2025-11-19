@@ -17,7 +17,7 @@ export default function PageHero({
   imageSrc,
   title,
   subtitle,
-  heightClass = "h-[36svh] md:h-[44svh]",
+  heightClass = "h-[50svh] md:h-[65svh]",
   navTrigger = "edge",
 }) {
   const ref = useRef(null);
@@ -55,7 +55,7 @@ export default function PageHero({
             sizes="100vw"
             className="object-cover object-center"
           />
-          <div className="absolute inset-0 bg-black/35" />
+          <div className="absolute inset-0 bg-black/50" />
         </motion.div>
 
         {/* Foreground/Text (leicht gegenläufig) */}

@@ -1,12 +1,8 @@
-import type { NextConfig } from "next";
-import path from "path";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  reactStrictMode: true,
-  webpack(config) {
-    // Allow imports like '@/...' to resolve to the root 'src' directory
-    config.resolve.alias["@"] = path.resolve(__dirname, "src");
-    return config;
+  experimental: {
+    optimizePackageImports: ['framer-motion', 'lucide-react'],
   },
 };
 

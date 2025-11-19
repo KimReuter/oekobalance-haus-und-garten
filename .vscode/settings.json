@@ -1,0 +1,12 @@
+{
+  "files.exclude": {
+    "**/.next": true
+  },
+  "search.exclude": {
+    "**/.next": true
+  },
+  "typescript.tsserver.exclude": [
+    "**/.next",
+    "**/.next/**"
+  ]
+}

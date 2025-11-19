@@ -1,5 +1,6 @@
 import { Phone, Mail, Clock } from "lucide-react";
 import PageHero from "@/components/common/PageHero";
+import AboutPaul from "@/components/home/AboutPaul";
 
 export const metadata = {
   title: "Kontakt – Ökobalance Haus & Garten",
@@ -42,10 +43,9 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* FORMULAR (hell, ohne bg) */}
       {/* FORMULAR – ohne grauen Hintergrund */}
       <section>
-        <div className="mx-auto max-w-3xl px-6 py-14">
+        <div className="mx-auto max-w-3xl px-6 pt-6 pb-14">
           <h2 className="text-xl md:text-2xl font-extrabold text-center">Schreib uns direkt</h2>
           <form className="mt-8 grid gap-6">
             <div className="grid md:grid-cols-2 gap-6">
@@ -91,6 +91,7 @@ export default function ContactPage() {
           </form>
         </div>
       </section>
+      
     </main>
   );
 }

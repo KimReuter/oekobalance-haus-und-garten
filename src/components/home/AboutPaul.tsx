@@ -12,21 +12,19 @@ const POINTS = [
   {
     icon: Leaf,
     title: "Nachhaltig denken",
-    text: (<>
-    Material bewusst wählen, langlebig bauen – Holz & Stein mit Sinn.
-    </>),
+    text: "Material bewusst wählen, langlebig bauen.",
     dir: "north" as const,
     window: [0.18, 0.38] as [number, number],
-    nudge: { x: -40, y: -140 },
+    nudge: { x: -40, y: -130 },   
   },
   // Osten
   {
     icon: Hammer,
     title: "Saubere Ausführung",
-    text: "Präzise, zuverlässig, ohne Schnickschnack. Was zählt: das Ergebnis.",
+    text: "Präzise, zuverlässig, ohne Schnickschnack.",
     dir: "east" as const,
     window: [0.35, 0.55] as [number, number],
-    nudge: { x: -30, y: -40 },
+    nudge: { x: -20, y: -60 },    
   },
   // Süden
   {
@@ -35,7 +33,7 @@ const POINTS = [
     text: "Klare Abläufe, kurze Wege, realistische Angebote.",
     dir: "south" as const,
     window: [0.52, 0.72] as [number, number],
-    nudge: { x: -40, y: -30 },
+    nudge: { x: -40, y: -10 },     
   },
   // Westen
   {
@@ -44,7 +42,7 @@ const POINTS = [
     text: "Ehrliche Beratung, direkte Kommunikation – von Anfang bis Ende.",
     dir: "west" as const,
     window: [0.68, 0.88] as [number, number],
-    nudge: { x: -150, y: -40 },
+    nudge: { x: -140, y: -60 },   
   },
 ];
 
@@ -240,8 +238,8 @@ export default function AboutPaul() {
                     >
                       {/* nur Label – kein Dot */}
                       <div
-                        className={`flex flex-col ${align} text-white max-w-[26rem] sm:max-w-[22rem]
-                      backdrop-blur-[1.5px] [text-shadow:0_1px_2px_rgba(0,0,0,0.45)]`}
+                        className={`flex flex-col ${align} text-white max-w-[18rem] sm:max-w-[16rem]
+  backdrop-blur-[1.5px] [text-shadow:0_1px_2px_rgba(0,0,0,0.45)]`}
                         style={{
                           ...labelOffset[dir],
                           transform: `${(labelOffset[dir] as any).transform ?? ""} translate(${nx}px, ${ny}px)`,

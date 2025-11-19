@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 
 const features = [
   "Ökologisch & materialbewusst",
@@ -10,22 +10,53 @@ const features = [
   "Individuelle Lösungen statt 08/15",
 ];
 
+type FeatureItemProps = {
+  label: string;
+  index: number;
+  total: number;
+  progress: MotionValue<number>;
+};
+
+function FeatureItem({ label, index, total, progress }: FeatureItemProps) {
+  const start = index / total;
+  const end = (index + 1) / total;
+
+  const textOpacity = useTransform(progress, [start, end], [0, 1]);
+  const textY = useTransform(progress, [start, end], [30, 0]);
+  const dotScale = useTransform(progress, [start, end], [1, 1.25]);
+
+  return (
+    <li className="relative flex items-start gap-4">
+      {/* Punkt */}
+      <motion.span
+        className="mt-1 h-4 w-4 md:h-5 md:w-5 rounded-full bg-brand-primary"
+        style={{ scale: dotScale }}
+      />
+
+      {/* Text */}
+      <motion.p
+        className="text-base md:text-lg text-slate-800 leading-snug md:leading-relaxed"
+        style={{ opacity: textOpacity, y: textY }}
+      >
+        {label}
+      </motion.p>
+    </li>
+  );
+}
+
 export default function WhySection() {
   const ref = useRef<HTMLDivElement>(null);
 
-  // gesamter Abschnitt scroll-gebunden
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"],
   });
 
-  // -------- LINKS: Headline & Paragraph scroll-gesteuert --------
-  // Zeitfenster (Anteile der Section); gern feinjustieren
-  const H_IN_START = 0.04, H_IN_END = 0.14;      // Headline rein (von links)
-  const P_IN_START = 0.10, P_IN_END = 0.22;      // Paragraph rein (von rechts)
-  const OUT_START  = 0.90;                       // ab hier beide wieder ausblenden
+  // Headline / Text Animation
+  const H_IN_START = 0.04, H_IN_END = 0.14;
+  const P_IN_START = 0.1, P_IN_END = 0.22;
+  const OUT_START = 0.9;
 
-  // Headline: x + opacity (einblenden -> halten -> ausblenden)
   const hX = useTransform(
     scrollYProgress,
     [H_IN_START, (H_IN_START + H_IN_END) / 2, OUT_START, 1],
@@ -37,7 +68,6 @@ export default function WhySection() {
     [0, 1, 1, 0]
   );
 
-  // Paragraph: x + opacity (einblenden -> halten -> ausblenden)
   const pX = useTransform(
     scrollYProgress,
     [P_IN_START, (P_IN_START + P_IN_END) / 2, OUT_START, 1],
@@ -50,9 +80,9 @@ export default function WhySection() {
   );
 
   return (
-    <section ref={ref} className="relative h-[400vh]">
-      <div className="sticky top-0 grid grid-cols-1 md:grid-cols-2 gap-12 px-6 md:px-12 lg:px-20 h-screen items-center">
-        {/* -------- LINKER TEXTBLOCK (scroll-gesteuert) -------- */}
+    <section ref={ref} className="relative h-[320vh]">
+      <div className="sticky top-0 h-screen grid grid-cols-1 md:grid-cols-2 gap-12 px-6 md:px-12 lg:px-20 items-center">
+        {/* links: Text */}
         <div>
           <motion.h2
             className="text-3xl md:text-4xl font-bold mb-6"
@@ -67,36 +97,26 @@ export default function WhySection() {
           >
             Wir verbinden <strong>Garten- und Landschaftsbau</strong>,{" "}
             <strong>Hausbau</strong> und <strong>Innenausbau</strong> mit einem
-            klaren Fokus auf <strong>Nachhaltigkeit</strong>. <br />
-            Das Ergebnis: langlebige Lösungen mit natürlichen Materialien und
-            sauberer Ausführung.
+            klaren Fokus auf <strong>Nachhaltigkeit</strong>. Das Ergebnis:
+            langlebige Lösungen mit natürlichen Materialien und sauberer
+            Ausführung.
           </motion.p>
         </div>
 
-        {/* -------- RECHTS: Timeline (deine bestehende Logik) -------- */}
-        <div className="relative pl-12 py-8">
-          <div className="absolute left-15 top-[-24px] bottom-[-24px] w-[2px] bg-brand-primary/40" />
-          <ul className="space-y-14">
-            {features.map((f, i) => {
-              const start = i / features.length;
-              const end   = (i + 1) / features.length;
-              const textOpacity = useTransform(scrollYProgress, [start, end], [0, 1]);
-              const textY       = useTransform(scrollYProgress, [start, end], [30, 0]);
-              const scale       = useTransform(scrollYProgress, [start, end], [1, 1.25]);
+        {/* rechts: Timeline */}
+        <div className="relative pl-8 md:pl-12 py-8">
+          <div className="pointer-events-none absolute left-3 md:left-4 top-0 bottom-0 w-px bg-brand-primary/40" />
 
-              return (
-                <li key={i} className="relative flex items-center gap-4">
-                  <motion.span
-                    className="absolute -left-0 h-6 w-6 rounded-full bg-brand-primary"
-                    style={{ scale, opacity: 1 }} // Punkt immer deckend, nur puls
-                    transition={{ repeat: Infinity, repeatType: "reverse", duration: 1.2, ease: "easeInOut" }}
-                  />
-                  <motion.p className="ml-10 text-lg text-slate-800" style={{ opacity: textOpacity, y: textY }}>
-                    {f}
-                  </motion.p>
-                </li>
-              );
-            })}
+          <ul className="space-y-8 md:space-y-14">
+            {features.map((label, index) => (
+              <FeatureItem
+                key={label}
+                label={label}
+                index={index}
+                total={features.length}
+                progress={scrollYProgress}
+              />
+            ))}
           </ul>
         </div>
       </div>

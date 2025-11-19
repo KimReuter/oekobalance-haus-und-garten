@@ -37,22 +37,10 @@ export default function HomePage() {
       <Hero />
 
       {/* INTRO + FEATURES */}
-      <WhySection />
       <WhySticky />
-
-      {/* ABOUT TEASER */}
-      <AboutPaul />
 
       {/* <OneStopTeaser /> */}
       <OneStopTeaser />
-
-      {/* FINAL CTA */}
-      <section className="pb-24 md:pb-32">
-        <ReferencesCarousel />
-      </section>
-
-      {/* TESTIMONIALS */}
-      <FinalCta />
 
       { /* Stats */}
       <Stats />
