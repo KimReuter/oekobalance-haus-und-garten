@@ -65,7 +65,7 @@ export default function PortfolioPage() {
 
       {/* HERO */}
       <PageHero
-        imageSrc="/portfolio-hero.jpg"
+        imageSrc="/gartenweg-5.jpg"
         title="Unsere Projekte"
         subtitle="Ausgewählte Arbeiten, die zeigen, wie wir denken und bauen."
         navTrigger="start"

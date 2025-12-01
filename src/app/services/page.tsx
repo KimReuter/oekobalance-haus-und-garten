@@ -7,7 +7,7 @@ import { Hammer, Ruler, Paintbrush, Wrench, Drill, CheckCircle2, Timer, TreePine
 import PageHero from "@/components/common/PageHero";
 import { motion, cubicBezier } from "framer-motion";
 import FlowProcess from "./FlowProcess";
-import FinalCta from "@/components/home/FinalCta";
+import FinalCta from "@/app/services/FinalCta";
 
 export const metadata = {
   title: "Leistungen – Ökobalance Haus & Garten",
@@ -44,7 +44,7 @@ export default function ServicesPage() {
     <main className="text-slate-800">
       {/* HERO */}
       <PageHero
-        imageSrc="/services-hero.jpg"
+        imageSrc="/natursteinmauer-1.jpg"
         title="Aus einer Hand. Sauber & zuverlässig."
         subtitle="Von Außenflächen bis Innenausbau – wir planen mit, packen an und liefern ordentlich ab."
         navTrigger="start"
@@ -52,7 +52,7 @@ export default function ServicesPage() {
       />
 
       {/* LEISTUNGSKACHELN */}
-      <section className="mx-auto max-w-6xl px-6 mt-10 md:mt-14 pt-16 pb-8 md:pt-20 md:pb-10">
+      <section className="mx-auto max-w-6xl px-6 mt-4 md:mt-10 pt-16 md:pt-20 md:pb-10">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {SERVICES.map((s) => (
             <article

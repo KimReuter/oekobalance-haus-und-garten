@@ -62,7 +62,7 @@ export default function BlogPage() {
             </section>
 
             {/* Posts-Grid */}
-            <section className="mx-auto max-w-6xl px-6 pb-16 md:pb-20">
+            <section className="mx-auto max-w-6xl px-6 pb-8 md:pb-20">
                 <h2 className="text-2xl md:text-3xl font-extrabold text-center">
                     Aktuelle Beiträge
                 </h2>
@@ -128,7 +128,7 @@ export default function BlogPage() {
     hover:scale-[1.03]
     no-underline hover:no-underline"
                         >
-                            Frage stellen 💬
+                            Frage stellen  💬
                         </Link>
                     </div>
                 </div>

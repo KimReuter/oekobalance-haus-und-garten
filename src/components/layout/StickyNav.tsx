@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import { Menu, X } from "lucide-react";
@@ -25,6 +25,9 @@ export default function StickyNav({
   const [scrolled, setScrolled] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  
+  // Ref für die Navigation
+  const navRef = useRef<HTMLElement>(null);
 
   // Hero erkennen & beim Routenwechsel Mobile-Menü schließen
   useEffect(() => {
@@ -37,6 +40,26 @@ export default function StickyNav({
     setMobileOpen(false);
   }, [pathname, heroSelector]);
 
+  // Click-Outside Handler für Mobile-Menü
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        navRef.current && 
+        !navRef.current.contains(event.target as Node) && 
+        mobileOpen
+      ) {
+        setMobileOpen(false);
+      }
+    }
+
+    if (mobileOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [mobileOpen]);
+
   // Scroll-Logik
   useEffect(() => {
     if (!hasHero) return;
@@ -44,7 +67,6 @@ export default function StickyNav({
     const heroEl = document.querySelector(heroSelector) as HTMLElement | null;
     if (!heroEl) return;
 
-    // 👇 NEU: Home erzwingen wir "start" (scrollY>0 reicht)
     const triggerMode =
       pathname === "/"
         ? "start"
@@ -85,7 +107,6 @@ export default function StickyNav({
       return () => w.removeEventListener("scroll", onScroll);
     }
   }, [hasHero, heroSelector, threshold, pathname]);
-  //                              👆 pathname hinzufügen
 
   const filledBg =
     afterScroll === "white" ? "bg-white" : "bg-brand-primary-light";
@@ -108,6 +129,7 @@ export default function StickyNav({
   return (
     <>
       <header
+        ref={navRef}
         className={clsx(
           "fixed top-0 left-0 right-0 w-full z-[99999] transition-colors duration-200",
           mobileOpen
@@ -126,7 +148,7 @@ export default function StickyNav({
             href="/"
             className={clsx(
               "text-lg font-extrabold tracking-tight",
-              "text-white" // Logo immer weiß, passt zu hellbraun & Hero
+              "text-white"
             )}
           >
             <span className="md:hidden">Ökobalance</span>

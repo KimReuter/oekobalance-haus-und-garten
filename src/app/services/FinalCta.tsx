@@ -33,7 +33,7 @@ export default function FinalCta() {
   const opacity = useTransform(scrollYProgress, [0, 0.15], [0, 1]);
 
   return (
-    <section ref={ref} className="relative py-24 md:py-32 text-center" aria-label="Final Call to Action">
+    <section ref={ref} className="relative pt-20 pb-18 md:pt-28 md:pb-40 text-center" aria-label="Final Call to Action">
       <motion.div style={{ scale, opacity }} className="mx-auto max-w-6xl px-6 md:px-10">
         {/* Heading */}
         <motion.h2
@@ -83,7 +83,7 @@ export default function FinalCta() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: easeOutExpo, delay: 0.6 }}
           viewport={{ once: true, amount: 0.4 }}
-          className="mt-18 flex justify-center gap-6 flex-wrap"
+          className="mt-12 md:mt-16 flex justify-center gap-6 flex-wrap"
         >
           <motion.a
             href="/contact"
@@ -130,9 +130,9 @@ function ArrowRightSmall() {
 }
 function ArrowDownSmall() {
   return (
-    <svg width="20" height="36" viewBox="0 0 20 36" className="text-brand-primary/50">
-      <path d="M10 0v28" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      <path d="M4 22l6 6 6-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="16" height="28" viewBox="0 0 16 28" className="text-brand-primary/50">
+      <path d="M8 0v22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path d="M3 17l5 5 5-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -140,23 +140,25 @@ function ArrowDownSmall() {
 /** StepCard mit Motion: Stagger-Einflug + Hover-Scale */
 function StepCard({ index, title, text }: { index: number; title: string; text: string }) {
   return (
-    <motion.div variants={stepItem} whileHover={{ scale: 1.03 }} transition={{ duration: 0.25 }}>
-      <div className="h-full rounded-2xl border border-brand-primary/20 bg-white p-6 md:p-7 shadow-sm
-                      flex flex-col items-center justify-center text-center">
-        <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-full
-                        bg-brand-primary/10 text-brand-primary font-bold">
-          {index}
+    <>
+      <motion.div variants={stepItem} whileHover={{ scale: 1.03 }} transition={{ duration: 0.25 }}>
+        <div className="h-full rounded-2xl border border-brand-primary/20 bg-white p-6 md:p-7 shadow-sm
+                        flex flex-col items-center justify-center text-center">
+          <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-full
+                          bg-brand-primary/10 text-brand-primary font-bold">
+            {index}
+          </div>
+          <h3 className="text-lg md:text-xl font-bold text-brand-primary">{title}</h3>
+          <p className="mt-2 text-slate-700">{text}</p>
         </div>
-        <h3 className="text-lg md:text-xl font-bold text-brand-primary">{title}</h3>
-        <p className="mt-2 text-slate-700">{text}</p>
-      </div>
+      </motion.div>
 
       {/* Mobile-Pfeil unter der Card (nur bei 1 & 2) */}
       {index < 3 && (
-        <div className="mt-4 flex justify-center md:hidden">
+        <div className="flex justify-center md:hidden">
           <ArrowDownSmall />
         </div>
       )}
-    </motion.div>
+    </>
   );
 }

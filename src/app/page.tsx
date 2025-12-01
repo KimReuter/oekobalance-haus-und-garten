@@ -7,7 +7,7 @@ import Hero from "@/components/home/Hero";
 import FeatureList from "@/components/home/FeatureList";
 import GalleryGrid from "@/components/home/GalleryGrid";
 import AboutPaul from "@/components/home/AboutPaul";
-import FinalCta from "@/components/home/FinalCta";
+import FinalCta from "@/app/services/FinalCta";
 
 import Container from "@/components/ui/Container";
 import Section from "@/components/ui/Section";
