@@ -120,7 +120,6 @@ export default function StickyNav({
     { href: "/", label: "Home" },
     { href: "/company", label: "Unternehmen" },
     { href: "/services", label: "Leistungen" },
-    { href: "/portfolio", label: "Portfolio" },
     { href: "/sustainability", label: "Nachhaltigkeit" },
     { href: "/blog", label: "Blog" },
     { href: "/contact", label: "Kontakt" },

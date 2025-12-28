@@ -1,23 +1,64 @@
 "use client";
-
 import { Dialog } from "@headlessui/react";
-import { X } from "lucide-react"; // <- Icon (oder eigenes SVG)
+import { X } from "lucide-react";
+import { useState } from "react";
 
-type ContactDialogProps = {
+export default function ContactDialog({
+  open,
+  onClose,
+}: {
   open: boolean;
   onClose: () => void;
-};
+}) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<string | null>(null);
 
-export default function ContactDialog({ open, onClose }: ContactDialogProps) {
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    // ✅ Vorab validieren (bevor wir senden)
+    if (!name.trim() || !email.trim() || !message.trim()) {
+      setStatus("Bitte Name, E-Mail und Nachricht ausfüllen.");
+      return;
+    }
+
+    setLoading(true);
+    setStatus(null);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        setStatus(data?.error ?? "Senden fehlgeschlagen.");
+        return;
+      }
+
+      setStatus("Gesendet ✅ Wir melden uns zeitnah.");
+      setName("");
+      setEmail("");
+      setMessage("");
+      setTimeout(onClose, 900);
+    } catch {
+      setStatus("Netzwerkfehler – bitte später erneut versuchen.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <Dialog open={open} onClose={onClose} className="relative z-[100000]">
-      {/* Overlay */}
       <div className="fixed inset-0 bg-black/40" aria-hidden="true" />
-
-      {/* Panel */}
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <Dialog.Panel className="relative w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
-          {/* Close Button */}
           <button
             type="button"
             onClick={onClose}
@@ -31,21 +72,30 @@ export default function ContactDialog({ open, onClose }: ContactDialogProps) {
             Projekt starten
           </Dialog.Title>
 
-          <form className="grid gap-4">
+          <form onSubmit={handleSubmit} className="grid gap-4">
             <input
               className="rounded-lg border border-slate-300 px-4 py-3"
               placeholder="Dein Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
             <input
               className="rounded-lg border border-slate-300 px-4 py-3"
               placeholder="Deine E-Mail"
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <textarea
               className="rounded-lg border border-slate-300 px-4 py-3"
               rows={4}
               placeholder="Deine Nachricht"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
             />
+
+            {status && <p className="text-sm text-slate-700">{status}</p>}
+
             <div className="flex justify-end gap-3">
               <button
                 type="button"
@@ -56,9 +106,10 @@ export default function ContactDialog({ open, onClose }: ContactDialogProps) {
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 rounded-lg bg-brand-primary text-white font-semibold"
+                disabled={loading}
+                className="px-4 py-2 rounded-lg bg-brand-primary text-white font-semibold disabled:opacity-60"
               >
-                Absenden 🚀
+                {loading ? "Sende…" : "Absenden 🚀"}
               </button>
             </div>
           </form>

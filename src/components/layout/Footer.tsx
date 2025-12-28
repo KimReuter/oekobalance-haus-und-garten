@@ -20,28 +20,6 @@ export default function Footer() {
             <p className="mt-3 text-sm text-brand-primary leading-relaxed">
               {siteConfig.intro}
             </p>
-
-            {/* Socials (optional) */}
-            <div className="mt-4 flex items-center gap-4">
-              {siteConfig.socials?.facebook && (
-                <a
-                  href={siteConfig.socials.facebook}
-                  className="text-brand-primary hover:text-white no-underline"
-                  aria-label="Facebook"
-                >
-                  FB
-                </a>
-              )}
-              {siteConfig.socials?.instagram && (
-                <a
-                  href={siteConfig.socials.instagram}
-                  className="text-brand-primary hover:text-white no-underline"
-                  aria-label="Instagram"
-                >
-                  IG
-                </a>
-              )}
-            </div>
           </div>
 
           {/* 2) Adresse/Kontakt */}
@@ -86,39 +64,26 @@ export default function Footer() {
             <p className="text-sm font-semibold tracking-wide text-brand-primary uppercase">
               Menü
             </p>
+
             <ul className="mt-3 space-y-2 text-sm">
-              <li>
-                <Link
-                  href="/"
-                  className="text-brand-primary hover:text-white underline-offset-4 hover:underline"
-                >
-                  Start
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/services"
-                  className="text-brand-primary hover:text-white underline-offset-4 hover:underline"
-                >
-                  Leistungen
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/gallery"
-                  className="text-brand-primary hover:text-white underline-offset-4 hover:underline"
-                >
-                  Galerie
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/contact"
-                  className="text-brand-primary hover:text-white underline-offset-4 hover:underline"
-                >
-                  Kontakt
-                </Link>
-              </li>
+              {[
+                { href: "/", label: "Home" },
+                { href: "/company", label: "Unternehmen" },
+                { href: "/services", label: "Leistungen" },
+                { href: "/sustainability", label: "Nachhaltigkeit" },
+                { href: "/blog", label: "Blog" },
+                { href: "/contact", label: "Kontakt" },
+              ].map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-brand-primary hover:text-white underline-offset-4 hover:underline"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+
               <li className="pt-2">
                 <Link
                   href="/impressum"
