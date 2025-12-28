@@ -1,16 +1,54 @@
+"use client";
+
+import { useState } from "react";
 import { Phone, Mail, Clock } from "lucide-react";
 import PageHero from "@/components/common/PageHero";
-import AboutPaul from "@/components/home/AboutPaul";
-
-export const metadata = {
-  title: "Kontakt – Ökobalance Haus & Garten",
-  description: "Schreib uns oder ruf an – wir freuen uns auf deine Anfrage.",
-};
 
 export default function ContactPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<string | null>(null);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus(null);
+
+    if (!name.trim() || !email.trim() || !message.trim()) {
+      setStatus("Bitte Name, E-Mail und Nachricht ausfüllen.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        setStatus(data?.error ?? "Senden fehlgeschlagen.");
+        return;
+      }
+
+      setStatus("Gesendet ✅ Wir melden uns zeitnah.");
+      setName("");
+      setEmail("");
+      setMessage("");
+    } catch {
+      setStatus("Netzwerkfehler – bitte später erneut versuchen.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <main className="text-slate-800">
-      {/* HERO mit Parallax; navTrigger="start" damit deine Nav sofort beim Scrollen braun wird */}
       <PageHero
         imageSrc="/contact.jpg"
         title="Kontakt aufnehmen"
@@ -18,7 +56,6 @@ export default function ContactPage() {
         navTrigger="start"
       />
 
-      {/* KONTAKT-INFOS + ÖFFNUNGSZEITEN */}
       <section className="mx-auto max-w-6xl px-6 py-16 md:py-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 text-center">
           {[
@@ -43,11 +80,11 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* FORMULAR – ohne grauen Hintergrund */}
       <section>
         <div className="mx-auto max-w-3xl px-6 pt-6 pb-14">
           <h2 className="text-xl md:text-2xl font-extrabold text-center">Schreib uns direkt</h2>
-          <form className="mt-8 grid gap-6">
+
+          <form onSubmit={handleSubmit} className="mt-8 grid gap-6">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-slate-700">Name</label>
@@ -56,9 +93,12 @@ export default function ContactPage() {
                   name="name"
                   type="text"
                   required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/30"
                 />
               </div>
+
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-slate-700">E-Mail</label>
                 <input
@@ -66,10 +106,13 @@ export default function ContactPage() {
                   name="email"
                   type="email"
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/30"
                 />
               </div>
             </div>
+
             <div>
               <label htmlFor="message" className="block text-sm font-medium text-slate-700">Nachricht</label>
               <textarea
@@ -77,22 +120,28 @@ export default function ContactPage() {
                 name="message"
                 rows={5}
                 required
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
                 className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/30"
               />
             </div>
+
+            {status && (
+              <p className="text-sm text-slate-700 text-center">{status}</p>
+            )}
+
             <div className="flex justify-center">
               <button
                 type="submit"
-                className="inline-flex items-center justify-center rounded-xl px-6 py-3 bg-brand-primary text-white font-semibold transform-gpu transition-transform duration-150 hover:scale-[1.03]"
+                disabled={loading}
+                className="inline-flex items-center justify-center rounded-xl px-6 py-3 bg-brand-primary text-white font-semibold transform-gpu transition-transform duration-150 hover:scale-[1.03] disabled:opacity-60"
               >
-                Absenden 🚀
+                {loading ? "Sende…" : "Absenden 🚀"}
               </button>
             </div>
           </form>
         </div>
       </section>
-      
     </main>
   );
 }
-
