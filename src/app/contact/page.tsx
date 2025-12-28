@@ -1,13 +1,18 @@
+// src/app/contact/page.tsx
 "use client";
 
-import { useState } from "react";
 import { Phone, Mail, Clock } from "lucide-react";
 import PageHero from "@/components/common/PageHero";
+import { useState } from "react";
 
 export default function ContactPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+
+  // Honeypot (muss leer bleiben)
+  const [website, setWebsite] = useState("");
+
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
 
@@ -21,29 +26,36 @@ export default function ContactPage() {
     }
 
     setLoading(true);
-
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message }),
+        body: JSON.stringify({ name, email, message, website }), // 👈 Honeypot mitsenden
       });
 
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
         setStatus(data?.error ?? "Senden fehlgeschlagen.");
+        setLoading(false);
         return;
       }
 
       setStatus("Gesendet ✅ Wir melden uns zeitnah.");
-      setName("");
-      setEmail("");
-      setMessage("");
-    } catch {
-      setStatus("Netzwerkfehler – bitte später erneut versuchen.");
-    } finally {
+      setName(""); setEmail(""); setMessage(""); setWebsite("");
+
+      // Analytics Event
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("contact_submit_success"));
+        // optional GA4:
+        // // @ts-ignore
+        // window.gtag?.("event", "contact_submit_success", { method: "contact_page" });
+      }
+
       setLoading(false);
+    } catch {
+      setLoading(false);
+      setStatus("Netzwerkfehler – bitte später erneut versuchen.");
     }
   }
 
@@ -56,6 +68,7 @@ export default function ContactPage() {
         navTrigger="start"
       />
 
+      {/* Kontaktinfos */}
       <section className="mx-auto max-w-6xl px-6 py-16 md:py-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 text-center">
           {[
@@ -80,55 +93,57 @@ export default function ContactPage() {
         </div>
       </section>
 
+      {/* Formular */}
       <section>
         <div className="mx-auto max-w-3xl px-6 pt-6 pb-14">
           <h2 className="text-xl md:text-2xl font-extrabold text-center">Schreib uns direkt</h2>
 
           <form onSubmit={handleSubmit} className="mt-8 grid gap-6">
+            {/* Honeypot: unsichtbar, nicht entfernen */}
+            <div className="hidden">
+              <label htmlFor="website">Website</label>
+              <input
+                id="website"
+                name="website"
+                type="text"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                autoComplete="off"
+                tabIndex={-1}
+              />
+            </div>
+
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-slate-700">Name</label>
+                <label className="block text-sm font-medium text-slate-700">Name</label>
                 <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  required
+                  className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/30"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/30"
                 />
               </div>
-
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-slate-700">E-Mail</label>
+                <label className="block text-sm font-medium text-slate-700">E-Mail</label>
                 <input
-                  id="email"
-                  name="email"
                   type="email"
-                  required
+                  className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/30"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/30"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="message" className="block text-sm font-medium text-slate-700">Nachricht</label>
+              <label className="block text-sm font-medium text-slate-700">Nachricht</label>
               <textarea
-                id="message"
-                name="message"
                 rows={5}
-                required
+                className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/30"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="mt-2 w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/30"
               />
             </div>
 
-            {status && (
-              <p className="text-sm text-slate-700 text-center">{status}</p>
-            )}
+            {status && <p className="text-sm text-slate-700 text-center">{status}</p>}
 
             <div className="flex justify-center">
               <button
